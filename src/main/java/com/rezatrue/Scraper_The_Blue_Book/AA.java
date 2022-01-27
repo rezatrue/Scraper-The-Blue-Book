@@ -1,19 +1,9 @@
 package com.rezatrue.Scraper_The_Blue_Book;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.LinkedList;
 import java.util.Random;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
-import com.rezatrue.Scraper_The_Blue_Book.Objects.ListPageJSoup;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class AA {
 
@@ -115,8 +105,8 @@ public class AA {
 //		File input = new File("F:/Scraping/2021/Dec/The-Blue-Book/pages/Search page1.html");
 //		File input = new File("F:/Scraping/2021/Dec/The-Blue-Book/pages/Search page2.html");
 //		File input = new File("F:/Scraping/2021/Dec/The-Blue-Book/pages/Search page3.html");
-		File input = new File("F:/Scraping/2021/Dec/The-Blue-Book/pages/l4.html");
-		
+//		File input = new File("F:/Scraping/2021/Dec/The-Blue-Book/pages/l4.html");
+		/*
 		try {
 			Document doc = Jsoup.parse(input, "UTF-8", "https://www.thebluebook.com/");
 			System.out.println(".........................");
@@ -127,16 +117,47 @@ public class AA {
 			LinkedList<String> list = lpj.getLocationListUrl();
 			for(int i =0 ; i <list.size(); i++) {
 				System.out.println(list.get(i));
-			}
-			
-		
+			}		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 		
+			
+		ExecutorService executor = Executors.newFixedThreadPool(5);
 		
+		for(int i =0; i < 18; i++) {
+			executor.submit(new Processor(i));
+		}
+		
+		executor.shutdown();
+		
+		try {
+			executor.awaitTermination(2, TimeUnit.DAYS);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
+}
+
+
+class Processor implements Runnable {
+
+    private int id;
+
+    public Processor(int id) {
+        this.id = id;
+    }
+
+    public void run() {
+        System.out.println("Starting: " + id);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException ignored) {
+        }
+        System.out.println("Completed: " + id);
+    }
 }
