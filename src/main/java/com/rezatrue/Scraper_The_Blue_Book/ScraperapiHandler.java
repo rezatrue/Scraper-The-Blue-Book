@@ -34,11 +34,10 @@ public class ScraperapiHandler {
 		
 	}
 
-	public String loadPage(String targetUrl, boolean render) {
+	public String loadPage(String targetUrl) {
 		String res = "";
 		try {
 			 String url = "http://api.scraperapi.com?api_key=" + apiKey + "&url="+targetUrl;
-			 if(render) url = url + "&render=true";
 			 
 			 URL urlForGetRequest = new URL(url);
 			 String readLine = null;

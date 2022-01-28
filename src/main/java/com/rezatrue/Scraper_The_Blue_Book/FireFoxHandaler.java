@@ -75,10 +75,10 @@ public class FireFoxHandaler {
 
 	    driver = new ChromeDriver(options);
 		
-		   	driver.get("http://mensmugs.com/");
+		   	//driver.get("http://mensmugs.com/");
 			//driver.get("https://www.javatpoint.com/");
 			try {
-				Thread.sleep(1000*5);
+				Thread.sleep(1000*1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

@@ -18,81 +18,34 @@ import com.rezatrue.Scraper_The_Blue_Book.Objects.ListPage;
 import com.rezatrue.Scraper_The_Blue_Book.Objects.ListPageJSoup;
 import com.rezatrue.Scraper_The_Blue_Book.Objects.SearchPage;
 
-public class TaskProcessor {
+public class TaskProcessor implements Runnable{
 
 	private int categorySerialNumber; // range 1 - 18
 	private int stateSerialNumber; // range 1 - 84
-	private int subcategorySerialNumber; // range 
+	private int subcategorySerialNumber = 1; // range 
+	private LinkedList<Subcategory> subcategoriesListUrl;
 	private String folderName;
 	
-	public TaskProcessor(int categorySerialNumber, int stateSerialNumber, int subcategorySerialNumber) {
-		this.categorySerialNumber = categorySerialNumber;
-		this.stateSerialNumber = stateSerialNumber;
-		this.subcategorySerialNumber = subcategorySerialNumber;
+	public TaskProcessor(TaskData data) {
+	//public TaskProcessor(int categorySerialNumber, int stateSerialNumber, LinkedList<Subcategory> subcategoriesListUrl) {
+		this.categorySerialNumber = data.getCategorySerialNumber();
+		this.stateSerialNumber = data.getStateSerialNumber();
 		this.folderName = categorySerialNumber+"-"+stateSerialNumber;
+		this.subcategoriesListUrl = data.getSubcategoriesListUrl();
 		
 		File directory = new File(folderName);
 		if (! directory.exists()) directory.mkdir();
 				
 	}
 	
-	private FireFoxHandaler fireFoxHandaler;
 	
-	public void start() {
-		// remove "//" from line 60 of the class FireFoxHandaler to make this headless
-        fireFoxHandaler = new FireFoxHandaler();
-        //fireFoxHandaler.openBrowser();
-  		//LoadUserAgent userAgent = new LoadUserAgent();
-  		//fireFoxHandaler.openChromeBrowser(userAgent.getRandomUserAgent());
-  		//fireFoxHandaler.openFirefoxBrowser(userAgent.getRandomUserAgent());
-        fireFoxHandaler.openFirefoxBrowser();
-        System.out.println("XY"+1);
-  		openCategorySubList();
-  		System.out.println("XY"+2);
-  		traverseSubCatList();
-  		System.out.println("XY"+3);
-  		fireFoxHandaler.closeBrowser(); 
+	
+	public void run() {
+  		traverseSubCatList(); // start point
 	}
 	
-    private LinkedList<Subcategory> subcategoriesListUrl;
-    private void openCategorySubList(){
-    	subcategoriesListUrl = new LinkedList<>();
-    	SearchPage sp = new SearchPage(fireFoxHandaler.driver);
-  		System.out.println("XY"+4);
-    	fireFoxHandaler.loadUrl(sp.getBaseUrl());
-    	if(fireFoxHandaler.isCaptchaPresent()) {
-    		fireFoxHandaler.captchaBypassWith2capt();
-    		if(fireFoxHandaler.isCaptchaPresent()) {
-        		fireFoxHandaler.captchaBypassWith2capt();
-    		}
-		}
-    	fireFoxHandaler.waitUntillCkickable(sp.categoryBy);
-    	
-  		System.out.println("XY"+5);
-
-    	//select state range (1 - 48)
-    	Select select = new Select(sp.getStateOptionsWE());
-    	select.selectByIndex(stateSerialNumber - 1);
-    	
-    	// open category page
-    	//WebElement catWebE = sp.getCategoyWEs().get(categorySerialNumber -1);
-    	sp.openCategoyPageUrl(categorySerialNumber -1);
-    	if(fireFoxHandaler.isCaptchaPresent()) {
-    		fireFoxHandaler.captchaBypassWith2capt();
-    		//openCategorySubList();
-    	}
-    	fireFoxHandaler.waitUntillCkickable(sp.subCategoryBy);
-    	
-    	subcategoriesListUrl = sp.getSubCategorylist();
-    	
-    	// display urls
-    	Iterator<Subcategory> it = subcategoriesListUrl.iterator();
-    	while(it.hasNext()) {
-    		System.out.println(" --- ");
-    		System.out.println(it.next().getName());
-    	}
-    }
-	
+    
+    	/// now start here 
     private void traverseSubCatList() {
     	if(subcategoriesListUrl.size() == 0) {
     		System.out.println("Sub Category List size Zero");
@@ -142,6 +95,7 @@ public class TaskProcessor {
 // ............ getLocationsList(String url) use selenium, 2captcha & proxyMesh.........//
 // ............ getLocationsListScraperApi(String url) use scraperapi.com.........//    
     private LinkedList<String> subcategoryLocationsListUrl;
+/*
     private void getLocationsList(String url) {
 		subcategoryLocationsListUrl = new LinkedList<>();
 		ListPage listPage = new ListPage(fireFoxHandaler.driver);
@@ -203,7 +157,7 @@ public class TaskProcessor {
 		}
 
     }
-
+*/
     private void getLocationsListScraperApi(String listPageurl) {
 		subcategoryLocationsListUrl = new LinkedList<>();
 		
@@ -260,6 +214,7 @@ public class TaskProcessor {
     
     //............  getData() use Selenium & getDataJSoup() use JSoup .......//
     private LinkedList<Info> data;
+/*
     private void getData() {
     	
     	if(subcategoryLocationsListUrl.size() == 0) {System.out.println("Locations List size 0"); return; }
@@ -290,7 +245,7 @@ public class TaskProcessor {
     		data.add(info);
     	}    	
     }
-
+*/
     private void getDataJSoup() {
     	
     	if(subcategoryLocationsListUrl.size() == 0) {System.out.println("Locations List size 0"); return; }
