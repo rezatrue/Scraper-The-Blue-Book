@@ -22,8 +22,16 @@ public class CategoryItemList {
 		list = new LinkedList<>();
 	}
 
+	private LinkedList<SuppiedData> sList;
+	public void loadListItems() {
+		sList = new LinkedList<>();
+		ReadCSV readcsv = new ReadCSV();
+		sList.addAll(readcsv.read("SearchKeys.csv"));
+		
+	}
+	
 	//private LinkedList<Subcategory> subcategoriesListUrl;
-	private void openCategorySubList(int categorySerialNumber){
+	private void openCategorySubList(int categorySerialNumber, LinkedList<Subcategory> slist){
     	//subcategoriesListUrl = new LinkedList<>();
 		TaskData taskData = new TaskData();
 		taskData.setCategorySerialNumber(categorySerialNumber);
@@ -59,9 +67,11 @@ public class CategoryItemList {
     	fireFoxHandaler.waitUntillCkickable(sp.subCategoryBy);
     	
     	//subcategoriesListUrl = sp.getSubCategorylist();
-    	taskData.setSubcategoriesListUrl(sp.getSubCategorylist());
-    	// display url counts
-    	System.out.println("............ " + sp.getSubCategorylist().size() + " .................");
+    	//taskData.setSubcategoriesListUrl(sp.getSubCategorylist());
+    	System.out.println("......"+categorySerialNumber+"......>");
+    	taskData.setSubcategoriesListUrl(sp.getSubCategorylist(slist));
+    	
+    	
     	list.add(taskData);
     	
     }
@@ -71,20 +81,31 @@ public class CategoryItemList {
 		
 		fireFoxHandaler.openFirefoxBrowser();
 		
-		for(int i = 1; i <= 18; i++) {
-			openCategorySubList(i);
+		for(int i = 0; i < sList.size(); i++) {
+			SuppiedData data = sList.get(i);
+			LinkedList<Subcategory> list = data.getList();
+			System.out.println(data.getCatNumber() + " -- " + list.size());
+			openCategorySubList(data.getCatNumber(), list);
+//			for(int j=0; j< list.size();j++) {
+//				System.out.println(list.get(j).getName());
+//			}
 		}
+		
+//		for(int i = 1; i <= 18; i++) {
+//			openCategorySubList(i);
+//		}
 		
 		fireFoxHandaler.closeBrowser();
 	}
 	
 	public void start() {
 		
+		System.out.println("Total cat: " + list.size());
 		
-		ExecutorService executor = Executors.newFixedThreadPool(5);
+		ExecutorService executor = Executors.newFixedThreadPool(7);
 		
 		for(int i =0; i < list.size(); i++) {
-			executor.submit(new TaskProcessor(list.remove()));
+			executor.submit(new TaskProcessor(list.get(i)));
 		}
 		
 		executor.shutdown();

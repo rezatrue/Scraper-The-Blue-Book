@@ -66,13 +66,25 @@ public class SearchPage {
 			System.out.println(e.getAttribute("href"));
 			list.add(subcategory);
 		}
-		
-//		driver.findElements(subCategoryBy)
-//		.forEach(i -> {
-//			list.add(new Subcategory(i.getText(), i.getAttribute("href")));
-//		});
-		
-		
 		return list; 
+	}	
+		
+	public LinkedList<Subcategory> getSubCategorylist(LinkedList<Subcategory> suppliedList) {
+		LinkedList<Subcategory> newList = new LinkedList<>();
+		Iterator<Subcategory> it = suppliedList.iterator();
+		
+		while(it.hasNext()) {
+			try {
+				Subcategory subcategory = it.next();
+				String subcatname = subcategory.getName();
+				By subCatBy = By.xpath("//div[@class='subcategories']/div[not(contains(@style,'display:none'))]//ul/li/a[contains(.,'"+ subcatname +"')]");
+				String subcaturl = driver.findElement(subCatBy).getAttribute("href");
+				subcategory.setUrl(subcaturl);
+				System.out.println(subcatname +" - - " +subcaturl);
+				newList.add(subcategory);
+			}catch(Exception e) {;}
+		}
+	System.out.println("           "+ newList.size() + "......>");
+	return newList; 
 	}
 }

@@ -69,7 +69,7 @@ public class FireFoxHandaler {
 
 	    ChromeOptions options = new ChromeOptions();
 	    options.addArguments("start-maximized");
-	    options.setHeadless(false);
+	    options.setHeadless(true);
 	    options.setProxy(proxy);
 	    //capabilities.setCapability(ChromeOptions.CAPABILITY, options);
 

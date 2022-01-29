@@ -170,9 +170,9 @@ public class TaskProcessor implements Runnable{
 			return;
 		}
 		ScraperapiHandler scraperapiHandler = new ScraperapiHandler();
-		String pageHtml = scraperapiHandler.loadPage(listPageurl, false);
+		String pageHtml = scraperapiHandler.loadPage(listPageurl);
 		if(pageHtml.length() == 0) {
-			pageHtml = scraperapiHandler.loadPage(listPageurl, false);
+			pageHtml = scraperapiHandler.loadPage(listPageurl);
 			if(pageHtml.length() == 0) {System.out.println("Locations List URL not loaded"); return; }
 		}	
 		
@@ -190,9 +190,9 @@ public class TaskProcessor implements Runnable{
 		try {
 			while(nextPage.length() > 0){
 				pageHtml = "";
-				pageHtml = scraperapiHandler.loadPage(nextPage, false);
+				pageHtml = scraperapiHandler.loadPage(nextPage);
 				if(pageHtml.length() == 0) {
-					pageHtml = scraperapiHandler.loadPage(nextPage, false);
+					pageHtml = scraperapiHandler.loadPage(nextPage);
 					if(pageHtml.length() == 0) break;
 				}
 				System.out.println(pageHtml);
@@ -256,7 +256,7 @@ public class TaskProcessor implements Runnable{
     	int count = 1;
     	while(subcategoryLocationsListUrl.size() > 0) {
     		String profileUrl = subcategoryLocationsListUrl.removeFirst();
-    		String pageHtml = scraperapiHandler.loadPage(profileUrl, false);
+    		String pageHtml = scraperapiHandler.loadPage(profileUrl);
     		
     		System.out.println("Data Page Loaded");
     		Info info = new Info();

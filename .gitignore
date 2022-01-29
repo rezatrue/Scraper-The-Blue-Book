@@ -1,2 +1,3 @@
 # Auth & Data files
 *.properties
+/target/

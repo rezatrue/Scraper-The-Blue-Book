@@ -24,6 +24,7 @@ public class App
         
     	System.out.println(">>>>>STATE:>>>>>>>"+stateSerialNumber+"<<<<<<<<<<<<<<<");
     	CategoryItemList categoryItemList = new CategoryItemList(stateSerialNumber);
+    	categoryItemList.loadListItems();
     	categoryItemList.collectList();
     	categoryItemList.start();
     	
